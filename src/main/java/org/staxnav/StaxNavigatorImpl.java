@@ -271,23 +271,22 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
       {
          return null;
       }
+
       Element next = current.next(depth);
-      if (next != null)
+      if (next == null)
       {
-         N name = naming.getName(next.getName());
-         if (names.contains(name))
-         {
-            current = next;
-            return name;
-         }
-         else
-         {
-            throw new StaxNavException(next.getLocation(), "Was not expecting an element among " + names + " instead of " + name);
-         }
+         return null;
+      }
+
+      N name = naming.getName(next.getName());
+      if (names.contains(name))
+      {
+         current = next;
+         return name;
       }
       else
       {
-         throw new StaxNavException(current.getLocation());
+         throw new StaxNavException(next.getLocation(), "Was expecting an element among " + names + " instead of " + name);
       }
    }
 

@@ -280,6 +280,24 @@ public abstract class AbstractBrowseTestCase<N> extends AbstractXMLTestCase
       }
    }
 
+   public void testNext4() throws Exception
+   {
+      assertNameEquals("foo1", navigator.getName());
+      Set<N> names = new HashSet<N>();
+      names.add(createName("bar1"));
+      names.add(createName("foo2"));
+      names.add(createName("bar2"));
+      names.add(createName("bar3"));
+      names.add(createName("foo3"));
+      names.add(createName("foobar1"));
+      names.add(createName("foobar2"));
+      while (navigator.next(names) != null)
+      {
+      }
+      assertEquals("foobar2", navigator.getName());
+      assertNull(navigator.next());
+   }
+
    public void testfind1() throws Exception
    {
       assertNameEquals("foo1", navigator.getName());
