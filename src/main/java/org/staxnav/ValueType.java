@@ -19,6 +19,9 @@
 
 package org.staxnav;
 
+import javax.xml.bind.DatatypeConverter;
+import java.util.Date;
+
 /**
  * The type of a value.
  *
@@ -72,6 +75,24 @@ public abstract class ValueType<V>
       protected Integer parse(String s) throws Exception
       {
          return Integer.parseInt(s.trim());
+      }
+   };
+
+   public static final ValueType<Date> DATE = new ValueType<Date>()
+   {
+      @Override
+      protected Date parse(String s) throws Exception
+      {
+         return DatatypeConverter.parseDate(s).getTime();
+      }
+   };
+
+   public static final ValueType<Date> DATE_TIME = new ValueType<Date>()
+   {
+      @Override
+      protected Date parse(String s) throws Exception
+      {
+         return DatatypeConverter.parseDateTime(s).getTime();
       }
    };
 
