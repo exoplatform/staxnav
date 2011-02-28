@@ -86,7 +86,7 @@ public interface StaxNavigator<N>
     * Creates a navigator scoped around the currently navigated element. The returned navigator will uses the current
     * element as navigation root and the navigation scope is the set of descendants of its root. The forked navigator
     * will use the same configuration than the navigator from which it was forked. The current navigation will be moved
-    * to the first node not in the scope of the forked navigator.
+    * to the next sibling of the current node.
     *
     * @return a forked navigator
     * @throws StaxNavException any StaxNavException
@@ -94,10 +94,21 @@ public interface StaxNavigator<N>
    StaxNavigator<N> fork() throws StaxNavException;
 
    /**
+    * Returns an iterable of stax navigator that is built according to the rules:
+    * <ul>
+    *    <li>Each element is found by the {@link #find(Object)}.</li>
+    *    <li>When an element is found, the {@link #sibling()} method is invoked.</li>
+    * </ul>
+    *
+    * @param name the name of the root elements of the forked navigator
+    * @return an iterable of the forks
+    */
+   Iterable<StaxNavigator<N>> fork(N name);
+
+   /**
     * Attemps to navigate to an element following the current one when it has the specified name.
     * If the navigation occurs, the navigator now points to that element and the method returns true.
     * Otherwise no navigation happen and the method return false.
-    *
     *
     * @param name the element name to find
     * @return true if the desired element is reached
@@ -117,7 +128,6 @@ public interface StaxNavigator<N>
     * Attempt to navigate to the next element when it has the specified name.
     * If the navigation occurs, the navigator now points to that element and the method returns true.
     * Otherwise no navigation happen and the method return false.
-    *
     *
     * @param name the desired element name
     * @return true if the desired element is reached
@@ -167,8 +177,6 @@ public interface StaxNavigator<N>
    /**
     * Returns a namespace URI by its prefix or return null if it is not bound.
     *
-    *
-    *
     * @param prefix the prefix
     * @return the corresponding namespace URI
     * @throws NullPointerException if the prefix is null
@@ -190,7 +198,6 @@ public interface StaxNavigator<N>
     * If the navigation occurs, the navigator now points to that element and the method returns true.
     * Otherwise no navigation happen and the method return false.
     *
-    *
     * @param name the next sibling name
     * @return true if the desired element is reached
     * @throws NullPointerException if the name argument is null
@@ -204,7 +211,6 @@ public interface StaxNavigator<N>
     * <li>a negative value means that no navigation occured</li>
     * <li>any other value is the difference of depth between the two elements</li>
     * </ul>
-    *
     *
     * @param name the descendant name
     * @return the

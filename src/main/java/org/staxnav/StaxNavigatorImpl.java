@@ -27,7 +27,11 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
@@ -181,6 +185,52 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
       return fork;
    }
 
+   public Iterable<StaxNavigator<N>> fork(N name)
+   {
+      List<Element> elements = Collections.emptyList();
+      while (find(name))
+      {
+         if (elements.isEmpty())
+         {
+            elements = new LinkedList<Element>();
+         }
+         elements.add(current);
+         if (sibling() == null)
+         {
+            break;
+         }
+      }
+
+      // Freeze what we need
+      final List<Element> a = elements;
+      final boolean trimContent = this.trimContent;
+
+      //
+      return new Iterable<StaxNavigator<N>>()
+      {
+         public Iterator<StaxNavigator<N>> iterator()
+         {
+            return new Iterator<StaxNavigator<N>>()
+            {
+               Iterator<Element> i = a.iterator();
+               public boolean hasNext()
+               {
+                  return i.hasNext();
+               }
+               public StaxNavigator<N> next()
+               {
+                  Element next = i.next();
+                  return new StaxNavigatorImpl<N>(naming, next, trimContent);
+               }
+               public void remove()
+               {
+                  throw new UnsupportedOperationException();
+               }
+            };
+         }
+      };
+   }
+
    public String getAttribute(QName name) throws NullPointerException, IllegalStateException, StaxNavException
    {
       if (name == null)
@@ -300,18 +350,26 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
       {
          return false;
       }
-      return name.equals(find(naming.getURI(name), naming.getLocalPart(name)));
+      Element element = find(naming.getURI(name), naming.getLocalPart(name));
+      if (element != null)
+      {
+         current = element;
+         return true;
+      }
+      else
+      {
+         return false;
+      }
    }
 
-   public N find(String namespaceURI, String localPart) throws StaxNavException
+   private Element find(String namespaceURI, String localPart) throws StaxNavException
    {
       Element element = current;
       while (element != null)
       {
          if (element.hasName(namespaceURI, localPart))
          {
-            current = element;
-            return naming.getName(element.getName());
+            return element;
          }
          else
          {

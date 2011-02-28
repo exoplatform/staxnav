@@ -21,6 +21,7 @@ import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamReader;
 import java.io.InputStream;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 /**
@@ -336,5 +337,49 @@ public abstract class AbstractBrowseTestCase<N> extends AbstractXMLTestCase
       assertNameEquals("foobar2", fork.getName());
       assertEquals(null, fork.next());
       assertEquals(null, navigator.getName());
+   }
+
+   public void testFork3() throws Exception
+   {
+      StaxNavigator<N> nav = navigator("<foo1><bar1><foo2/></bar1><bar1/><bar2/><bar1><bar3/></bar1><foo3/></foo1>");
+      Iterable<StaxNavigator<N>> iterable = nav.fork(createName("bar1"));
+      Iterator<StaxNavigator<N>> iterator = iterable.iterator();
+      assertTrue(iterator.hasNext());
+      StaxNavigator<N> n1 = iterator.next();
+      assertNameEquals("bar1", n1.getName());
+      assertNameEquals("foo2", n1.next());
+      assertNull(n1.next());
+      assertTrue(iterator.hasNext());
+      StaxNavigator<N> n2 = iterator.next();
+      assertNameEquals("bar1", n2.getName());
+      assertNull(n2.next());
+      assertTrue(iterator.hasNext());
+      StaxNavigator<N> n3 = iterator.next();
+      assertNameEquals("bar1", n3.getName());
+      assertNameEquals("bar3", n3.next());
+      assertNull(n3.next());
+      assertFalse(iterator.hasNext());
+      assertNameEquals("foo3", nav.getName());
+      assertNull(nav.next());
+   }
+
+   public void testFork4() throws Exception
+   {
+      StaxNavigator<N> nav = navigator("<foo1><bar1><foo2/></bar1></foo1>");
+      assertTrue(nav.find(createName("bar1")));
+      StaxNavigator<N> bar1 = nav.fork();
+      assertNameEquals("bar1", bar1.getName());
+      assertEquals(null, nav.getName());
+   }
+
+   public void testFork5() throws Exception
+   {
+      StaxNavigator<N> nav = navigator("<foo1><bar1><foo2/></bar1></foo1>");
+      Iterator<StaxNavigator<N>> i = nav.fork(createName("bar1")).iterator();
+/*
+      StaxNavigator<N> bar1 = nav.fork();
+      assertNameEquals("bar1", bar1.getName());
+      assertEquals(null, nav.getName());
+*/
    }
 }
