@@ -295,7 +295,7 @@ public abstract class AbstractBrowseTestCase<N> extends AbstractXMLTestCase
       while (navigator.next(names) != null)
       {
       }
-      assertEquals("foobar2", navigator.getName());
+      assertNameEquals("foobar2", navigator.getName());
       assertNull(navigator.next());
    }
 
