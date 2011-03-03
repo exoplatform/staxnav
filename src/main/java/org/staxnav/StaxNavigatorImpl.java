@@ -31,7 +31,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
@@ -270,6 +269,11 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
          return null;
       }
       return current.getNamespaceByPrefix(prefix);
+   }
+
+   public boolean hasNext() throws StaxNavException
+   {
+      return current != null && current.hasNext();
    }
 
    public N next() throws StaxNavException
@@ -539,6 +543,8 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
 
       protected abstract String getNamespaceByPrefix(String namespacePrefix);
 
+      protected abstract boolean hasNext() throws StaxNavException;
+
       protected abstract Element next(int depth) throws StaxNavException;
 
       protected abstract Element next() throws StaxNavException;
@@ -632,6 +638,11 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
       protected String getNamespaceByPrefix(String namespacePrefix)
       {
          return get().getNamespaceByPrefix(namespacePrefix);
+      }
+
+      protected boolean hasNext() throws StaxNavException
+      {
+         return get().hasNext();
       }
 
       protected Element next(int depth) throws StaxNavException
@@ -869,6 +880,15 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
             }
          }
          return null;
+      }
+
+      protected boolean hasNext() throws StaxNavException
+      {
+         if (next == null)
+         {
+            next = next();
+         }
+         return next != null;
       }
 
       protected Element next(int depth) throws StaxNavException

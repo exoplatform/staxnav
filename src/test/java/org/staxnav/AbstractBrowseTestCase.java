@@ -238,6 +238,47 @@ public abstract class AbstractBrowseTestCase<N> extends AbstractXMLTestCase
       assertEquals(-1, navigator.descendant(createName("blah")));
    }
 
+   public void testHasNext1() throws Exception
+   {
+      assertNameEquals("foo1", navigator.getName());
+      assertTrue(navigator.hasNext());
+      assertEquals(createName("bar1"), navigator.next());
+      assertTrue(navigator.hasNext());
+      assertEquals(createName("foo2"), navigator.next());
+      assertTrue(navigator.hasNext());
+      assertEquals(createName("bar2"), navigator.next());
+      assertTrue(navigator.hasNext());
+      assertEquals(createName("bar3"), navigator.next());
+      assertTrue(navigator.hasNext());
+      assertEquals(createName("foo3"), navigator.next());
+      assertTrue(navigator.hasNext());
+      assertEquals(createName("foobar1"), navigator.next());
+      assertTrue(navigator.hasNext());
+      assertEquals(createName("foobar2"), navigator.next());
+
+      assertFalse(navigator.hasNext());
+   }
+
+   public void testHasNext2() throws Exception
+   {
+      assertNameEquals("foo1", navigator.getName());
+      assertTrue(navigator.hasNext());
+
+      // Ensure navigation has not happened
+      assertNameEquals("foo1", navigator.getName());
+      assertEquals(1, navigator.getDepth());
+      assertTrue(navigator.child(createName("bar1")));
+
+      assertTrue(navigator.hasNext());
+
+      // Ensure navigation has not happened
+      assertNameEquals("bar1", navigator.getName());
+      assertEquals(2, navigator.getDepth());
+      assertTrue(navigator.sibling(createName("foobar2")));
+
+      assertFalse(navigator.hasNext());
+   }
+
    public void testNext1() throws Exception
    {
       assertNameEquals("foo1", navigator.getName());
