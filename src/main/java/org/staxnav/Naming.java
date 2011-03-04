@@ -106,15 +106,17 @@ public abstract class Naming<N>
       }
    }
 
-   public static class Enumerated<E extends Enum<E>> extends Naming<E>
+   public static class Enumerated<E extends Enum<E> & EnumElement<E>> extends Naming<E>
    {
 
       /** . */
       private final Class<E> enumType;
+      private final E noSuchElement;
 
-      public Enumerated(Class<E> enumType)
+      public Enumerated(Class<E> enumType, E noSuchElement)
       {
          this.enumType = enumType;
+         this.noSuchElement = noSuchElement;
       }
 
       @Override
@@ -126,12 +128,7 @@ public abstract class Naming<N>
       @Override
       protected String getLocalPart(E name)
       {
-         String s = name.name();
-         if (s.indexOf('_') >= 0)
-         {
-            s = s.replace('_', '-');
-         }
-         return s;
+         return name.getLocalName();
       }
 
       @Override
@@ -149,11 +146,15 @@ public abstract class Naming<N>
       @Override
       protected E getName(String uri, String prefix, String localPart)
       {
-         if (localPart.indexOf('-') != -1)
+         for (E e : enumType.getEnumConstants())
          {
-            localPart = localPart.replace('-', '_');
+            if (localPart.equals(e.getLocalName()))
+            {
+               return e;
+            }
          }
-         return Enum.valueOf(enumType, localPart);
+
+         return noSuchElement;
       }
    }
 }

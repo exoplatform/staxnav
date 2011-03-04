@@ -21,15 +21,26 @@ package org.staxnav;/*
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public enum SampleName
+public enum SampleName implements EnumElement<SampleName>
 {
 
-   foo1, foo2, foo3,
+   FOO1("foo1"), FOO2("foo2"), FOO3("foo3"),
 
-   bar1, bar2, bar3,
+   BAR1("bar1"), BAR2("bar2"), BAR3("bar3"),
 
-   foobar1, foobar2,
+   FOOBAR1("foobar1"), FOOBAR2("foobar2"),
 
-   donotexist, blah, bilto
+   DONOTEXIST("donotexist"), BLAH("blah"), BILTO("bilto");
 
+   private String localName;
+
+   SampleName(String localName)
+   {
+      this.localName = localName;
+   }
+
+   public String getLocalName()
+   {
+      return localName;
+   }
 }

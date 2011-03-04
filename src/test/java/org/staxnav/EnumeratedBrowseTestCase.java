@@ -17,6 +17,8 @@ package org.staxnav;/*
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
 
+import java.util.Collections;
+
 /**
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
@@ -27,6 +29,6 @@ public class EnumeratedBrowseTestCase extends AbstractBrowseTestCase<SampleName>
    @Override
    protected Naming<SampleName> getNaming()
    {
-      return new Naming.Enumerated<SampleName>(SampleName.class);
+      return new Naming.Enumerated<SampleName>(SampleName.class, SampleName.DONOTEXIST);
    }
 }

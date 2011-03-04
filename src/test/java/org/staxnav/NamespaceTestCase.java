@@ -50,16 +50,29 @@ public class NamespaceTestCase extends StaxNavigatorTestCase
       assertEquals("http://www.w3.org/2000/svg", navigator.getNamespaceByPrefix("ns"));
    }
 
-   static enum Name
+   static enum Name implements EnumElement<Name>
    {
-      foo, bar, juu
+      FOO("foo"), BAR("bar"), JUU("juu"), NOT_FOUND(null);
+
+      private String localName;
+
+      Name(String localName)
+      {
+         this.localName = localName;
+      }
+
+      public String getLocalName()
+      {
+         return localName;
+      }
    }
 
    public void testC() throws Exception
    {
-      StaxNavigator<Name> navigator = navigator(new Naming.Enumerated<Name>(Name.class), "namespace1.xml");
-      assertEquals(Name.foo, navigator.getName());
-      assertEquals(true, navigator.next(Name.bar));
+      StaxNavigator<Name> navigator = navigator(new Naming.Enumerated<Name>(Name.class, Name.NOT_FOUND), "namespace1.xml");
+      assertEquals(Name.FOO, navigator.getName());
+      assertEquals(true, navigator.next(Name.BAR));
+      assertEquals(Name.NOT_FOUND, navigator.next());
    }
 
    public void testD() throws Exception
