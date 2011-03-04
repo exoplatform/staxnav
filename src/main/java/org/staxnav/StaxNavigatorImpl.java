@@ -27,6 +27,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -273,7 +274,7 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
 
    public boolean hasNext() throws StaxNavException
    {
-      return current != null && current.hasNext();
+      return current != null && current.hasNext(depth);
    }
 
    public N next() throws StaxNavException
@@ -340,7 +341,13 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
       }
       else
       {
-         throw new StaxNavException(next.getLocation(), "Was expecting an element among " + names + " instead of " + name);
+         Set<String> localNames = new HashSet<String>(names.size());
+         for (N n : names)
+         {
+            localNames.add(naming.getLocalPart(n));
+         }
+
+         throw new StaxNavException(next.getLocation(), "Was expecting an element among " + localNames + " instead of " + naming.getLocalPart(name));
       }
    }
 
@@ -543,7 +550,7 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
 
       protected abstract String getNamespaceByPrefix(String namespacePrefix);
 
-      protected abstract boolean hasNext() throws StaxNavException;
+      protected abstract boolean hasNext(int depth) throws StaxNavException;
 
       protected abstract Element next(int depth) throws StaxNavException;
 
@@ -640,9 +647,9 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
          return get().getNamespaceByPrefix(namespacePrefix);
       }
 
-      protected boolean hasNext() throws StaxNavException
+      protected boolean hasNext(int depth) throws StaxNavException
       {
-         return get().hasNext();
+         return get().hasNext(depth);
       }
 
       protected Element next(int depth) throws StaxNavException
@@ -882,13 +889,9 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
          return null;
       }
 
-      protected boolean hasNext() throws StaxNavException
+      protected boolean hasNext(int depth) throws StaxNavException
       {
-         if (next == null)
-         {
-            next = next();
-         }
-         return next != null;
+         return next(depth) != null;
       }
 
       protected Element next(int depth) throws StaxNavException

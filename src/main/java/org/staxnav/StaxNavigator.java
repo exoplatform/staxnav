@@ -21,8 +21,6 @@ package org.staxnav;
 
 import javax.xml.namespace.QName;
 import javax.xml.stream.Location;
-import java.util.Iterator;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 /**
@@ -106,9 +104,9 @@ public interface StaxNavigator<N>
    Iterable<StaxNavigator<N>> fork(N name);
 
    /**
-    * Attemps to navigate to an element following the current one when it has the specified name.
+    * Attempts to navigate to an element following the current one when it has the specified name.
     * If the navigation occurs, the navigator now points to that element and the method returns true.
-    * Otherwise no navigation happen and the method return false.
+    * Otherwise no navigation happens and the method returns false.
     *
     * @param name the element name to find
     * @return true if the desired element is reached
@@ -117,12 +115,13 @@ public interface StaxNavigator<N>
    boolean find(N name) throws StaxNavException;
 
    /**
-    * Indicates if there's more elements to be read. No navigation is performed.
+    * Indicates if there's more elements to be parsed. No navigation occurs.
     *
-    * @return true if more elements can be read.
+    * @return true if more elements can be parsed.
     * @throws StaxNavException any StaxNavException
     */
    boolean hasNext() throws StaxNavException;
+
    /**
     * Navigates to the next element and returns its name or null if the end of the stream is reached.
     *
@@ -134,7 +133,7 @@ public interface StaxNavigator<N>
    /**
     * Attempt to navigate to the next element when it has the specified name.
     * If the navigation occurs, the navigator now points to that element and the method returns true.
-    * Otherwise no navigation happen and the method return false.
+    * Otherwise no navigation happens and the method returns false.
     *
     * @param name the desired element name
     * @return true if the desired element is reached
@@ -146,7 +145,7 @@ public interface StaxNavigator<N>
    N next(Set<N> names) throws NullPointerException, StaxNavException;
 
    /**
-    * Attempts to navigate to the first child found and return its name. If no such child exist then null
+    * Attempts to navigate to the first child found and return its name. If no such child exists then null
     * is returned.
     *
     * @return the child name
@@ -157,7 +156,7 @@ public interface StaxNavigator<N>
    /**
     * Attempts to navigate to the first child with the specified name.
     * If the navigation occurs, the navigator now points to that element and the method returns true.
-    * Otherwise no navigation happen and the method return false.
+    * Otherwise no navigation happens and the method returns false.
     *
     *
     * @param name the child name
@@ -203,7 +202,7 @@ public interface StaxNavigator<N>
    /**
     * Attempts to navigate to the next sibling with the specified name.
     * If the navigation occurs, the navigator now points to that element and the method returns true.
-    * Otherwise no navigation happen and the method return false.
+    * Otherwise no navigation happens and the method returns false.
     *
     * @param name the next sibling name
     * @return true if the desired element is reached
@@ -215,7 +214,7 @@ public interface StaxNavigator<N>
    /**
     * Attempts to navigate to the first descendant with the specified name. The returned value should be interpreted as:
     * <ul>
-    * <li>a negative value means that no navigation occured</li>
+    * <li>a negative value means that no navigation occurred</li>
     * <li>any other value is the difference of depth between the two elements</li>
     * </ul>
     *
