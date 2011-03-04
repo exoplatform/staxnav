@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Characters are backwards, used for EncodedNamingTestCase example -->
+<skoob>
+   <koob>
+      <eltit>A eltiT</eltit>
+      <rohtua>A rohtuA</rohtua>
+      <skoob-detaler>
+         <koob>54321-1</koob>
+         <koob>43210-1</koob>
+         <nwonknu></nwonknu>
+      </skoob-detaler>
+   </koob>
+   <koob>
+      <eltit>B eltiT</eltit>
+      <rohtua>B rohtuA</rohtua>
+      <skoob-detaler>
+         <koob>54321-2</koob>
+         <koob>43210-2</koob>
+      </skoob-detaler>
+      <nwonknu></nwonknu>
+   </koob>
+   <koob>
+      <nwonknu></nwonknu>
+      <eltit>C eltiT</eltit>
+      <rohtua>C rohtuA</rohtua>
+      <skoob-detaler>
+         <koob>54321-3</koob>
+         <koob>43210-3</koob>
+      </skoob-detaler>
+   </koob>
+</skoob>
