@@ -1,9 +1,8 @@
 /*
- * JBoss, a division of Red Hat
- * Copyright 2011, Red Hat Middleware, LLC, and individual
- * contributors as indicated by the @authors tag. See the
- * copyright.txt in the distribution for a full listing of
- * individual contributors.
+ * JBoss, Home of Professional Open Source.
+ * Copyright 2011, Red Hat, Inc., and individual contributors
+ * as indicated by the @author tags. See the copyright.txt file in the
+ * distribution for a full listing of individual contributors.
  *
  * This is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as
@@ -24,9 +23,11 @@
 package org.staxnav;
 
 import junit.framework.TestCase;
+import org.mockito.InOrder;
 
 import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
+import javax.xml.stream.XMLStreamConstants;
 import javax.xml.stream.XMLStreamWriter;
 
 import static org.mockito.Mockito.*;
@@ -228,6 +229,121 @@ public abstract class StaxWriterTestCase<N> extends TestCase
       verify(stream).writeStartElement("foobar");
       verify(stream).writeCharacters("stuff");
       verify(stream, times(3)).writeEndElement();
+   }
+
+   public void testFormatter() throws Exception
+   {
+      InOrder order = inOrder(formatter, stream);
+
+      // Start element
+      writer.writeStartElement(createName("foo"));
+      verifyFormatter(order, XMLStreamConstants.START_DOCUMENT, new VerifyClosure()
+      {
+         public void verify(InOrder order) throws Exception
+         {
+            // first start element also writes the document
+            order.verify(stream).writeStartDocument(ENCODING, VERSION);
+         }
+      });
+      verifyFormatter(order, XMLStreamConstants.START_ELEMENT, new VerifyClosure()
+      {
+         public void verify(InOrder order) throws Exception
+         {
+            order.verify(stream).writeStartElement("foo");
+         }
+      });
+
+      // Namespace
+      writer.writeNamespace("prefix", "uri");
+      verifyFormatter(order, XMLStreamConstants.NAMESPACE, new VerifyClosure()
+      {
+         public void verify(InOrder order) throws Exception
+         {
+            order.verify(stream).writeNamespace("prefix", "uri");
+         }
+      });
+
+      // Default namespace
+      writer.writeDefaultNamespace("uri");
+      verifyFormatter(order, XMLStreamConstants.NAMESPACE, new VerifyClosure()
+      {
+         public void verify(InOrder order) throws Exception
+         {
+            order.verify(stream).writeDefaultNamespace("uri");
+         }
+      });
+
+      // Attribute
+      writer.writeAttribute("name", "value");
+      verifyFormatter(order, XMLStreamConstants.ATTRIBUTE, new VerifyClosure()
+      {
+         public void verify(InOrder order) throws Exception
+         {
+            order.verify(stream).writeAttribute("name", "value");
+         }
+      });
+
+      // Comment
+      writer.writeComment("comment");
+      verifyFormatter(order, XMLStreamConstants.COMMENT, new VerifyClosure()
+      {
+         public void verify(InOrder order) throws Exception
+         {
+            order.verify(stream).writeComment("comment");
+         }
+      });
+
+      // CData
+      writer.writeCData("cdata");
+      verifyFormatter(order, XMLStreamConstants.CDATA, new VerifyClosure()
+      {
+         public void verify(InOrder order) throws Exception
+         {
+            order.verify(stream).writeCData("cdata");
+         }
+      });
+
+      // Content
+      writer.writeContent("content");
+      verifyFormatter(order, XMLStreamConstants.CHARACTERS, new VerifyClosure()
+      {
+         public void verify(InOrder order) throws Exception
+         {
+            order.verify(stream).writeCharacters("content");
+         }
+      });
+
+      // End element
+      writer.writeEndElement();
+      verifyFormatter(order, XMLStreamConstants.END_ELEMENT, new VerifyClosure()
+      {
+         public void verify(InOrder order) throws Exception
+         {
+            order.verify(stream).writeEndElement();
+         }
+      });
+
+      // End document
+      writer.finish();
+      verifyFormatter(order, XMLStreamConstants.END_DOCUMENT, new VerifyClosure()
+      {
+         public void verify(InOrder order) throws Exception
+         {
+            order.verify(stream).writeEndDocument();
+         }
+      });
+   }
+
+   protected void verifyFormatter(InOrder order, int event, VerifyClosure closure) throws Exception
+   {
+      order.verify(formatter).before(stream, event);
+      closure.verify(order);
+      order.verify(formatter).after(stream, event);
+   }
+
+   private static interface VerifyClosure
+   {
+      void verify(InOrder order) throws Exception;
    }
 
    public static class LocalStaxWriterTestCase extends StaxWriterTestCase<String>
