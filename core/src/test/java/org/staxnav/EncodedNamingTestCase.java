@@ -107,31 +107,31 @@ public class EncodedNamingTestCase extends StaxNavigatorTestCase
    private static class EncodedNaming extends Naming<EncodedElement>
    {
       @Override
-      String getLocalPart(EncodedElement name)
+      public String getLocalPart(EncodedElement name)
       {
          return name.encoded;
       }
 
       @Override
-      String getURI(EncodedElement name)
+      public String getURI(EncodedElement name)
       {
          return null;
       }
 
       @Override
-      String getPrefix(EncodedElement name)
+      public String getPrefix(EncodedElement name)
       {
          return null;
       }
 
       @Override
-      EncodedElement getName(QName name)
+      public EncodedElement getName(QName name)
       {
          return (name == null) ? null : getName(name.getNamespaceURI(), name.getPrefix(), name.getLocalPart());
       }
 
       @Override
-      EncodedElement getName(String uri, String prefix, String localPart)
+      public EncodedElement getName(String uri, String prefix, String localPart)
       {
          EncodedElement element = EncodedElement.MAP.get(localPart);
 

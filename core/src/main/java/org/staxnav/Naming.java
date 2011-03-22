@@ -31,45 +31,45 @@ import java.util.Map;
 public abstract class Naming<N>
 {
 
-   abstract String getLocalPart(N name);
+   public abstract String getLocalPart(N name);
 
-   abstract String getURI(N name);
+   public abstract String getURI(N name);
 
-   abstract String getPrefix(N name);
+   public abstract String getPrefix(N name);
 
-   abstract N getName(QName name);
+   public abstract N getName(QName name);
 
-   abstract N getName(String uri, String prefix, String localPart);
+   public abstract N getName(String uri, String prefix, String localPart);
 
    public static class Local extends Naming<String>
    {
 
       @Override
-      protected String getName(String uri, String prefix, String localPart)
+      public String getName(String uri, String prefix, String localPart)
       {
          return localPart;
       }
 
       @Override
-      String getName(QName name)
+      public String getName(QName name)
       {
          return name == null ? null : name.getLocalPart();
       }
 
       @Override
-      protected String getPrefix(String name)
+      public String getPrefix(String name)
       {
          return "";
       }
 
       @Override
-      protected String getURI(String name)
+      public String getURI(String name)
       {
          return null;
       }
 
       @Override
-      protected String getLocalPart(String name)
+      public String getLocalPart(String name)
       {
          return name;
       }
@@ -79,31 +79,31 @@ public abstract class Naming<N>
    {
 
       @Override
-      protected QName getName(String uri, String prefix, String localPart)
+      public QName getName(String uri, String prefix, String localPart)
       {
          return prefix != null ? new QName(uri, localPart, prefix) : new QName(uri, localPart);
       }
 
       @Override
-      QName getName(QName name)
+      public QName getName(QName name)
       {
          return name;
       }
 
       @Override
-      protected String getURI(QName name)
+      public String getURI(QName name)
       {
          return name != null ? name.getNamespaceURI() : null;
       }
 
       @Override
-      protected String getPrefix(QName name)
+      public String getPrefix(QName name)
       {
          return name != null ? name.getPrefix() : null;
       }
 
       @Override
-      protected String getLocalPart(QName name)
+      public String getLocalPart(QName name)
       {
          return name != null ? name.getLocalPart() : null;
       }
@@ -125,19 +125,19 @@ public abstract class Naming<N>
       }
 
       @Override
-      E getName(QName name)
+      public E getName(QName name)
       {
          return name == null ? null : getName(null, null, name.getLocalPart());
       }
 
       @Override
-      protected String getURI(E name)
+      public String getURI(E name)
       {
          return null;
       }
 
       @Override
-      protected String getPrefix(E name)
+      public String getPrefix(E name)
       {
          return "";
       }
@@ -186,13 +186,13 @@ public abstract class Naming<N>
          }
 
          @Override
-         protected String getLocalPart(E name)
+         public String getLocalPart(E name)
          {
             return toLocalPart.get(name);
          }
 
          @Override
-         protected E getName(String uri, String prefix, String localPart)
+         public E getName(String uri, String prefix, String localPart)
          {
             E name = toName.get(localPart);
             return name != null ? name : noSuchElement;
@@ -214,13 +214,13 @@ public abstract class Naming<N>
          }
 
          @Override
-         protected String getLocalPart(E name)
+         public String getLocalPart(E name)
          {
             return name.getLocalName();
          }
 
          @Override
-         protected E getName(String uri, String prefix, String localPart)
+         public E getName(String uri, String prefix, String localPart)
          {
             for (E e : all)
             {
