@@ -1,3 +1,25 @@
+/*
+ * JBoss, Home of Professional Open Source.
+ * Copyright 2011, Red Hat, Inc., and individual contributors
+ * as indicated by the @author tags. See the copyright.txt file in the
+ * distribution for a full listing of individual contributors.
+ *
+ * This is free software; you can redistribute it and/or modify it
+ * under the terms of the GNU Lesser General Public License as
+ * published by the Free Software Foundation; either version 2.1 of
+ * the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this software; if not, write to the Free
+ * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
+ * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ */
+
 package org.staxnav;
 
 import javax.xml.XMLConstants;
@@ -24,7 +46,7 @@ public class StaxWriterImpl<N> implements StaxWriter<N>
 
    public StaxWriterImpl(Naming<N> naming, XMLStreamWriter writer)
    {
-      this(naming, writer, new SimpleFormatter());
+      this(naming, writer, null);
    }
 
    public StaxWriterImpl(Naming<N> naming, XMLStreamWriter writer, XmlStreamingFormatter formatter)
@@ -36,6 +58,8 @@ public class StaxWriterImpl<N> implements StaxWriter<N>
    {
       this.naming = naming;
       this.writer = writer;
+      if (formatter == null) formatter = new GenericFormatter();
+
       this.formatter = formatter;
       elementStack.push(new RootElement(writer, formatter, encoding, version));
    }
@@ -470,5 +494,16 @@ public class StaxWriterImpl<N> implements StaxWriter<N>
    private static interface StreamClosure
    {
       void execute(XMLStreamWriter writer) throws XMLStreamException;
+   }
+
+   private static class GenericFormatter implements XmlStreamingFormatter
+   {
+      public void before(XMLStreamWriter writer, int event) throws XMLStreamException
+      {
+      }
+
+      public void after(XMLStreamWriter writer, int event) throws XMLStreamException
+      {
+      }
    }
 }
