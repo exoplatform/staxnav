@@ -35,6 +35,12 @@ public class EncodedNamingTestCase extends StaxNavigatorTestCase
          {
             return decode(s);
          }
+
+         @Override
+         protected String print(String value) throws StaxNavException
+         {
+            return encode(value);
+         }
       };
       assertTrue(navigator.find(EncodedElement.TITLE_ELEMENT));
       assertEquals("Title A", navigator.parseContent(decoderValueType));

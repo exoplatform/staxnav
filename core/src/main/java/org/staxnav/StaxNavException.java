@@ -30,11 +30,21 @@ public class StaxNavException extends RuntimeException
 {
 
    /** . */
-   private final Location location;
+   private Location location;
 
    public Location getLocation()
    {
       return location;
+   }
+
+   public StaxNavException(String message)
+   {
+      super(message);
+   }
+
+   public StaxNavException(String message, Throwable t)
+   {
+      super(message, t);
    }
 
    public StaxNavException(Location location)

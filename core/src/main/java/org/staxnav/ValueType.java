@@ -20,6 +20,7 @@
 package org.staxnav;
 
 import javax.xml.bind.DatatypeConverter;
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -28,6 +29,7 @@ import java.util.Date;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
+//TODO: This seems more like a converter then a ValueType...possibly change the class name to something more meaningful ?
 public abstract class ValueType<V>
 {
    /**
@@ -49,6 +51,12 @@ public abstract class ValueType<V>
       {
          return s;
       }
+
+      @Override
+      protected String print(String value) throws StaxNavException
+      {
+         return value;
+      }
    };
 
    public static final ValueType<String> TRIMMED_STRING = new ValueType<String>()
@@ -57,6 +65,12 @@ public abstract class ValueType<V>
       protected String parse(String s) throws Exception
       {
          return s.trim();
+      }
+
+      @Override
+      protected String print(String value) throws StaxNavException
+      {
+         return value.trim();
       }
    };
 
@@ -67,6 +81,12 @@ public abstract class ValueType<V>
       {
          return Boolean.parseBoolean(s.trim());
       }
+
+      @Override
+      protected String print(Boolean value) throws StaxNavException
+      {
+         return value.toString();
+      }
    };
 
    public static final ValueType<Integer> INTEGER = new ValueType<Integer>()
@@ -75,6 +95,12 @@ public abstract class ValueType<V>
       protected Integer parse(String s) throws Exception
       {
          return Integer.parseInt(s.trim());
+      }
+
+      @Override
+      protected String print(Integer value) throws StaxNavException
+      {
+         return value.toString();
       }
    };
 
@@ -85,6 +111,14 @@ public abstract class ValueType<V>
       {
          return DatatypeConverter.parseDate(s).getTime();
       }
+
+      @Override
+      protected String print(Date value) throws StaxNavException
+      {
+         Calendar cal = Calendar.getInstance();
+         cal.setTime(value);
+         return DatatypeConverter.printDate(cal);
+      }
    };
 
    public static final ValueType<Date> DATE_TIME = new ValueType<Date>()
@@ -93,6 +127,14 @@ public abstract class ValueType<V>
       protected Date parse(String s) throws Exception
       {
          return DatatypeConverter.parseDateTime(s).getTime();
+      }
+
+      @Override
+      protected String print(Date value) throws StaxNavException
+      {
+         Calendar cal = Calendar.getInstance();
+         cal.setTime(value);
+         return DatatypeConverter.printDateTime(cal);
       }
    };
 
@@ -112,6 +154,12 @@ public abstract class ValueType<V>
       {
          return Enum.valueOf(enumType, s.trim());
       }
+
+      @Override
+      protected String print(E value) throws StaxNavException
+      {
+         return value.name();
+      }
    }
 
    protected ValueType()
@@ -126,5 +174,8 @@ public abstract class ValueType<V>
     * @throws Exception any exception that would prevent the type conversion to happen
     */
    protected abstract V parse(String s) throws Exception;
+
+   // Following DatatypeConverter naming, don't like the name print tho...
+   protected abstract String print(V value) throws StaxNavException;
 
 }
