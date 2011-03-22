@@ -24,6 +24,7 @@ public class EncodedNamingTestCase extends StaxNavigatorTestCase
       assertEquals(EncodedElement.BOOK_ELEMENT, navigator.sibling());
       assertEquals(EncodedElement.BOOK_ELEMENT, navigator.sibling());
       assertEquals(EncodedElement.NOT_FOUND, navigator.next());
+      assertEquals("nwonknu", navigator.getLocalName());
    }
 
    public void testValueType()

@@ -40,6 +40,14 @@ public interface StaxNavigator<N>
    N getName() throws StaxNavException;
 
    /**
+    * Returns the string representation of the local xml element.
+    *
+    * @return name of xml element
+    * @throws StaxNavException any StaxNavException
+    */
+   String getLocalName() throws StaxNavException;
+
+   /**
     * Returns the location of the start tag of the currently navigated element.
     *
     * @return the element location
