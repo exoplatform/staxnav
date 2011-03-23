@@ -40,6 +40,13 @@ public interface StaxNavigator<N>
    N getName() throws StaxNavException;
 
    /**
+    * Returns the naming used for this navigator.
+    *
+    * @return the naming object used for the navigator.
+    */
+   Naming<N> getNaming();
+
+   /**
     * Returns the string representation of the local xml element.
     *
     * @return name of xml element

@@ -88,6 +88,11 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
       return current.getElement().getName(naming);
    }
 
+   public Naming<N> getNaming()
+   {
+      return naming;
+   }
+
    public String getLocalName() throws StaxNavException
    {
       if (current == null)
