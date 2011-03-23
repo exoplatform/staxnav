@@ -620,7 +620,7 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
             }
             catch (XMLStreamException e)
             {
-               throw new StaxNavException(stream.getLocation());
+               throw new StaxNavException(e);
             }
          }
          if (root == null)
