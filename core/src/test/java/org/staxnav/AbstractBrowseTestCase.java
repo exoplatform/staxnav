@@ -314,12 +314,20 @@ public abstract class AbstractBrowseTestCase<N> extends AbstractXMLTestCase
    {
       assertNameEquals("foo1", navigator.getName());
       assertEquals(true, navigator.find(createName("foo2")));
-      StaxNavigator<N> fork = navigator.fork();
-      assertEquals(createName("foo2"), fork.getName());
-      assertEquals(createName("bar2"), fork.next());
-      assertEquals(createName("bar3"), fork.next());
-      assertEquals(createName("foo3"), fork.next());
-      assertEquals(null, fork.next());
+      N foo = navigator.fork(new StaxClosure<N>()
+      {
+         public boolean call(StaxNavigator<N> fork, int index) throws StaxNavException
+         {
+            assertEquals(0, index);
+            assertEquals(createName("foo2"), fork.getName());
+            assertEquals(createName("bar2"), fork.next());
+            assertEquals(createName("bar3"), fork.next());
+            assertEquals(createName("foo3"), fork.next());
+            assertEquals(null, fork.next());
+            return false;
+         }
+      });
+      assertNameEquals("foobar1", foo);
       assertNameEquals("foobar1", navigator.getName());
    }
 
@@ -327,10 +335,18 @@ public abstract class AbstractBrowseTestCase<N> extends AbstractXMLTestCase
    {
       assertNameEquals("foo1", navigator.getName());
       assertEquals(true, navigator.find(createName("foobar2")));
-      StaxNavigator<N> fork = navigator.fork();
-      assertNameEquals("foobar2", fork.getName());
-      assertEquals(null, fork.next());
-      assertEquals(null, navigator.getName());
+      N fork = navigator.fork(new StaxClosure<N>()
+      {
+         public boolean call(StaxNavigator<N> fork, int index) throws StaxNavException
+         {
+            assertEquals(0, index);
+            assertNameEquals("foobar2", fork.getName());
+            assertEquals(null, fork.next());
+            return false;
+         }
+      });
+      assertEquals(null, fork);
+      assertEquals(createName("foobar2"), navigator.getName());
    }
 
    public void testFork3() throws Exception
@@ -361,9 +377,17 @@ public abstract class AbstractBrowseTestCase<N> extends AbstractXMLTestCase
    {
       StaxNavigator<N> nav = navigator("<foo1><bar1><foo2/></bar1></foo1>");
       assertTrue(nav.find(createName("bar1")));
-      StaxNavigator<N> bar1 = nav.fork();
-      assertNameEquals("bar1", bar1.getName());
-      assertEquals(null, nav.getName());
+      N sibling = nav.fork(new StaxClosure<N>()
+      {
+         public boolean call(StaxNavigator<N> fork, int index) throws StaxNavException
+         {
+            assertEquals(0, index);
+            assertNameEquals("bar1", fork.getName());
+            return false;
+         }
+      });
+      assertEquals(null, sibling);
+      assertNameEquals("bar1", nav.getName());
    }
 
    public void testFork5() throws Exception

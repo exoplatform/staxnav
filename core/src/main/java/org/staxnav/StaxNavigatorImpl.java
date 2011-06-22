@@ -199,6 +199,17 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
       return fork;
    }
 
+   public N fork(StaxClosure<N> closure) throws StaxNavException
+   {
+      StaxNavigatorImpl<N> fork = new StaxNavigatorImpl<N>(naming, current, trimContent);
+
+      //
+      closure.call(fork, 0);
+
+      //
+      return sibling();
+   }
+
    public Iterable<StaxNavigator<N>> fork(N name)
    {
       List<Entry> elements = Collections.emptyList();

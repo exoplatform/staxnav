@@ -106,16 +106,31 @@ public interface StaxNavigator<N>
     */
    <V> V parseContent(ValueType<V> valueType) throws IllegalStateException, NullPointerException, StaxNavException, TypeConversionException;
 
+//   /**
+//    * Creates a navigator scoped around the currently navigated element. The returned navigator will uses the current
+//    * element as navigation root and the navigation scope is the set of descendants of its root. The forked navigator
+//    * will use the same configuration than the navigator from which it was forked. The current navigation will be moved
+//    * to the next sibling of the current node.
+//    *
+//    * @return a forked navigator
+//    * @throws StaxNavException any StaxNavException
+//    */
+//   StaxNavigator<N> fork() throws StaxNavException;
+
    /**
-    * Creates a navigator scoped around the currently navigated element. The returned navigator will uses the current
-    * element as navigation root and the navigation scope is the set of descendants of its root. The forked navigator
-    * will use the same configuration than the navigator from which it was forked. The current navigation will be moved
-    * to the next sibling of the current node.
+    * Fork the navigator scoped around the currently navigated element and execute the provided closure with that
+    * forked navigator. The forked navigator will use the current element as navigation root and the navigation scope
+    * is the set of the descendants of its root. That navigator will also use the same configuration than the navigator
+    * from which it was forked. The current navigation will be moved to the next sibling of the current node if such
+    * element exists otherwise it will remain on the currently navigated element. When a sibling can be reached the
+    * name of this sibling will be returned otherwise the null value is returned indicating that no navigation was
+    * performed.
     *
-    * @return a forked navigator
-    * @throws StaxNavException any StaxNavException
+    * @param closure the closure
+    * @return
+    * @throws StaxNavException
     */
-   StaxNavigator<N> fork() throws StaxNavException;
+   N fork(StaxClosure<N> closure) throws StaxNavException;
 
    /**
     * Returns an iterable of stax navigator that is built according to the rules:
