@@ -273,10 +273,9 @@ public interface StaxNavigator<N>
     * @param name the attribute name
     * @return the attribute value
     * @throws NullPointerException if the name argument is null
-    * @throws IllegalStateException if no element is currently navigated
     * @throws StaxNavException any StaxNavException
     */
-   String getAttribute(String name) throws NullPointerException, IllegalStateException, StaxNavException;
+   String getAttribute(String name) throws NullPointerException, StaxNavException;
 
    /**
     * Returns an attribute of the current element or null if such attribute does not exist.
@@ -284,28 +283,25 @@ public interface StaxNavigator<N>
     * @param name the attribute name
     * @return the attribute value
     * @throws NullPointerException if the name argument is null
-    * @throws IllegalStateException if no element is currently navigated
     * @throws StaxNavException any StaxNavException
     */
-   String getAttribute(QName name) throws NullPointerException, IllegalStateException, StaxNavException;
+   String getAttribute(QName name) throws NullPointerException, StaxNavException;
 
    /**
-    * Returns all attributes of the current element or null if such attribute does not exist.
+    * Returns all attributes of the current element or null when the no valid node is being navigated.
     *
     * @return all attributes
-    * @throws IllegalStateException if no element is currently navigated
     * @throws StaxNavException any StaxNavException
     */
-   Map<String, String> getAttributes() throws IllegalStateException, StaxNavException;
+   Map<String, String> getAttributes() throws StaxNavException;
 
    /**
-    * Returns all attributes of the current element or null if such attribute does not exist.
+    * Returns all attributes of the current element or null when the no valid node is being navigated.
     *
     * @return all attributes
-    * @throws IllegalStateException if no element is currently navigated
     * @throws StaxNavException any StaxNavException
     */
-   Map<QName, String> getQualifiedAttributes() throws IllegalStateException, StaxNavException;
+   Map<QName, String> getQualifiedAttributes() throws StaxNavException;
 
    /**
     * Returns a namespace URI by its prefix or return null if it is not bound.
