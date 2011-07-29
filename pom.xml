@@ -243,7 +243,7 @@
    <modules>
       <module>core</module>
       <module>tests</module>
-      <module>docs</module>
+      <!--<module>docs</module>-->
    </modules>
 
 </project>
