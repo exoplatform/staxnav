@@ -19,12 +19,8 @@
 
 package org.staxnav;
 
-import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import java.io.StringReader;
 
 /**
@@ -36,18 +32,7 @@ public abstract class AbstractXMLTestCase extends TestCase
 
    protected final <N> StaxNavigator<N> navigator(Naming<N> naming, String document)
    {
-      try
-      {
-         StringReader reader = new StringReader(document);
-         XMLInputFactory factory = XMLInputFactory.newInstance();
-         XMLStreamReader stream = factory.createXMLStreamReader(reader);
-         return new StaxNavigatorImpl<N>(naming, stream);
-      }
-      catch (XMLStreamException e)
-      {
-         AssertionFailedError afe = new AssertionFailedError("Could not parse XML " + document);
-         afe.initCause(e);
-         throw afe;
-      }
+      StringReader reader = new StringReader(document);
+      return StaxNavigatorFactory.create(naming, reader);
    }
 }

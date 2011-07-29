@@ -18,7 +18,6 @@ package org.staxnav;/*
 */
 
 import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -44,11 +43,9 @@ public abstract class AbstractBrowseTestCase<N> extends AbstractXMLTestCase
    {
       Naming<N> naming = getNaming();
       InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream("sample.xml");
-      XMLInputFactory factory = XMLInputFactory.newInstance();
-      XMLStreamReader stream = factory.createXMLStreamReader(is);
 
       //
-      this.navigator = new StaxNavigatorImpl<N>(naming, stream);
+      this.navigator = StaxNavigatorFactory.create(naming, is);
       this.naming = naming;
    }
 

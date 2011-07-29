@@ -38,7 +38,7 @@ import java.util.Set;
  * @author <a href="mailto:julien.viet@exoplatform.com">Julien Viet</a>
  * @version $Revision$
  */
-public class StaxNavigatorImpl<N> implements StaxNavigator<N>
+class StaxNavigatorImpl<N> implements StaxNavigator<N>
 {
 
    /** . */
@@ -53,7 +53,7 @@ public class StaxNavigatorImpl<N> implements StaxNavigator<N>
    /** . */
    private boolean trimContent;
 
-   public StaxNavigatorImpl(Naming<N> naming, XMLStreamReader stream) throws XMLStreamException
+   StaxNavigatorImpl(Naming<N> naming, XMLStreamReader stream) throws XMLStreamException
    {
       if (naming == null)
       {

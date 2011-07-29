@@ -19,12 +19,8 @@
 
 package org.staxnav;
 
-import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamReader;
 import java.io.InputStream;
 
 /**
@@ -36,19 +32,8 @@ public abstract class StaxNavigatorTestCase extends TestCase
 
    public <N> StaxNavigator<N> navigator(Naming<N> naming, String resource)
    {
-      try
-      {
-         InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(resource);
-         XMLInputFactory factory = XMLInputFactory.newInstance();
-         XMLStreamReader stream = factory.createXMLStreamReader(in);
-         return new StaxNavigatorImpl<N>(naming, stream);
-      }
-      catch (XMLStreamException e)
-      {
-         AssertionFailedError afe = new AssertionFailedError();
-         afe.initCause(e);
-         throw afe;
-      }
+      InputStream in = ClassLoader.getSystemClassLoader().getResourceAsStream(resource);
+      return StaxNavigatorFactory.create(naming, in);
    }
 
 }

@@ -19,8 +19,6 @@ package org.staxnav;/*
 
 import junit.framework.TestCase;
 
-import javax.xml.stream.XMLInputFactory;
-import javax.xml.stream.XMLStreamReader;
 import java.io.InputStream;
 
 /**
@@ -31,17 +29,15 @@ public class GateInTestCase extends TestCase
 {
 
    /** . */
-   private StaxNavigatorImpl<String> navigator;
+   private StaxNavigator<String> navigator;
 
    @Override
    protected void setUp() throws Exception
    {
       InputStream is = ClassLoader.getSystemClassLoader().getResourceAsStream("portlet-application.xml");
-      XMLInputFactory factory = XMLInputFactory.newInstance();
-      XMLStreamReader stream = factory.createXMLStreamReader(is);
 
       //
-      navigator = new StaxNavigatorImpl<String>(new Naming.Local(), stream);
+      navigator = StaxNavigatorFactory.create(new Naming.Local(), is);
    }
 
    public void testPortlet() throws Exception
