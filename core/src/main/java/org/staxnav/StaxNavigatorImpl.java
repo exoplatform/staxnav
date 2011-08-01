@@ -333,8 +333,13 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
       {
          Map<QName, String> qualifiedAttributes = current.getElement().getQualifiedAttributes();
          Map<String, String> attributes = getAttributes();
-         for (String key : attributes.keySet()) {
-            qualifiedAttributes.put(new QName(key), attributes.get(key));
+         if (!attributes.isEmpty()) {
+           if (qualifiedAttributes.isEmpty()) {
+             qualifiedAttributes = new HashMap<QName, String>(qualifiedAttributes);
+           }
+           for (String key : attributes.keySet()) {
+              qualifiedAttributes.put(new QName(key), attributes.get(key));
+           }
          }
          if (qualifiedAttributes.isEmpty())
          {

@@ -2,4 +2,5 @@
 <foo xmlns="http://www.w3.org/TR/html4/" xmlns:ns="http://www.w3.org/2000/svg">
   <bar juu="juu_value" ns:juu="ns_juu_value">
   </bar>
+  <noNs juu="juu_value"/>
 </foo>
