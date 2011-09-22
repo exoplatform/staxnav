@@ -56,6 +56,14 @@ public interface StaxNavigator<N>
    String getLocalName() throws StaxNavException;
 
    /**
+    * Returns the qname of the current xml element.
+    *
+    * @return
+    * @throws StaxNavException
+    */
+   QName getQName() throws StaxNavException;
+
+   /**
     * Returns the location of the start tag of the currently navigated element.
     *
     * @return the element location

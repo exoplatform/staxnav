@@ -44,7 +44,7 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
    /** . */
    private final Naming<N> naming;
 
-   /** . */
+   /** The current element, it is never null. */
    private Entry current;
 
    /** . */
@@ -81,10 +81,6 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
 
    public N getName() throws StaxNavException
    {
-      if (current == null)
-      {
-         return null;
-      }
       return current.getElement().getName(naming);
    }
 
@@ -95,29 +91,21 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
 
    public String getLocalName() throws StaxNavException
    {
-      if (current == null)
-      {
-         return null;
-      }
-
       return current.getElement().getName().getLocalPart();
+   }
+
+   public QName getQName() throws StaxNavException
+   {
+      return current.getElement().getName();
    }
 
    public Location getLocation() throws StaxNavException
    {
-      if (current == null)
-      {
-         return null;
-      }
       return current.getElement().getLocation();
    }
 
    public int getDepth() throws StaxNavException
    {
-      if (current == null)
-      {
-         return -1;
-      }
       return current.getElement().getDepth();
    }
 
@@ -133,10 +121,6 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
 
    public String getContent() throws StaxNavException
    {
-      if (current == null)
-      {
-         return null;
-      }
       return current.getElement().getContent(trimContent);
    }
 
@@ -145,10 +129,6 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
       if (valueType == null)
       {
          throw new NullPointerException();
-      }
-      if (current == null)
-      {
-         return null;
       }
       Entry element = current;
       String content = element.getElement().getContent(true);
@@ -175,10 +155,6 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
 
    public String getAttribute(String name) throws NullPointerException, IllegalStateException, StaxNavException
    {
-      if (current == null)
-      {
-         return null;
-      }
       Map<String, String> attributes = current.getElement().getAttributes();
       if (attributes.isEmpty())
       {
@@ -284,10 +260,6 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
       {
          throw new NullPointerException("No null attribute name expected");
       }
-      if (current == null)
-      {
-         return null;
-      }
       if (XMLConstants.NULL_NS_URI.equals(name.getNamespaceURI()))
       {
          return getAttribute(name.getLocalPart());
@@ -308,10 +280,6 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
 
    public Map<String, String> getAttributes() throws NullPointerException, IllegalStateException, StaxNavException
    {
-      if (current == null)
-      {
-         return null;
-      }
       Map<String, String> attributes = current.getElement().getAttributes();
       if (attributes.isEmpty())
       {
@@ -325,30 +293,23 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
 
    public Map<QName, String> getQualifiedAttributes() throws NullPointerException, IllegalStateException, StaxNavException
    {
-      if (current == null)
+      Map<QName, String> qualifiedAttributes = current.getElement().getQualifiedAttributes();
+      Map<String, String> attributes = getAttributes();
+      if (!attributes.isEmpty()) {
+        if (qualifiedAttributes.isEmpty()) {
+          qualifiedAttributes = new HashMap<QName, String>(qualifiedAttributes);
+        }
+        for (String key : attributes.keySet()) {
+           qualifiedAttributes.put(new QName(key), attributes.get(key));
+        }
+      }
+      if (qualifiedAttributes.isEmpty())
       {
-         return null;
+         return Collections.emptyMap();
       }
       else
       {
-         Map<QName, String> qualifiedAttributes = current.getElement().getQualifiedAttributes();
-         Map<String, String> attributes = getAttributes();
-         if (!attributes.isEmpty()) {
-           if (qualifiedAttributes.isEmpty()) {
-             qualifiedAttributes = new HashMap<QName, String>(qualifiedAttributes);
-           }
-           for (String key : attributes.keySet()) {
-              qualifiedAttributes.put(new QName(key), attributes.get(key));
-           }
-         }
-         if (qualifiedAttributes.isEmpty())
-         {
-            return Collections.emptyMap();
-         }
-         else
-         {
-            return qualifiedAttributes;
-         }
+         return qualifiedAttributes;
       }
    }
 
@@ -357,10 +318,6 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
       if (prefix == null)
       {
          throw new NullPointerException();
-      }
-      if (current == null)
-      {
-         return null;
       }
       return current.getElement().getNamespaceByPrefix(prefix);
    }
@@ -611,25 +568,17 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
       {
          throw new NullPointerException();
       }
-      if (current == null)
-      {
-         return null;
-      }
       Entry next = current.next(depth);
-      if (next == null)
+      if (next != null)
       {
-         return null;
+         N name = naming.getName(next.getElement().getName());
+         if (names.contains(name))
+         {
+            current = next;
+            return name;
+         }
       }
-      N name = naming.getName(next.getElement().getName());
-      if (names.contains(name))
-      {
-         current = next;
-         return name;
-      }
-      else
-      {
-         return null;
-      }
+      return null;
    }
 
    public int descendant(N name) throws NullPointerException, StaxNavException
@@ -637,10 +586,6 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
       if (name == null)
       {
          throw new NullPointerException("No null name accepted");
-      }
-      if (current == null)
-      {
-         return 0;
       }
       return _descendant(name);
    }
