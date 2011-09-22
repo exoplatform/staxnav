@@ -3,7 +3,7 @@
    <parent>
       <artifactId>staxnav.tests</artifactId>
       <groupId>org.staxnav</groupId>
-      <version>0.9.6</version>
+      <version>0.9.7-SNAPSHOT</version>
    </parent>
    <modelVersion>4.0.0</modelVersion>
 
@@ -14,13 +14,13 @@
       <dependency>
          <groupId>org.staxnav</groupId>
          <artifactId>staxnav.core</artifactId>
-         <version>0.9.6</version>
+         <version>0.9.7-SNAPSHOT</version>
          <scope>test</scope>
       </dependency>
       <dependency>
          <groupId>org.staxnav</groupId>
          <artifactId>staxnav.core</artifactId>
-         <version>0.9.6</version>
+         <version>0.9.7-SNAPSHOT</version>
          <type>test-jar</type>
          <scope>test</scope>
       </dependency>
