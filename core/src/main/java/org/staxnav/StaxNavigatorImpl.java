@@ -166,6 +166,24 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
       }
    }
 
+   public <N1> StaxNavigator<N1> fork(Naming<N1> naming) throws StaxNavException {
+      return fork(naming, Axis.SELF);
+   }
+
+   public <N1> StaxNavigator<N1> fork(Naming<N1> naming, Axis axis) throws NullPointerException {
+      if (axis == null)
+      {
+         throw new NullPointerException("No null axis accepted");
+      }
+      StaxNavigatorImpl<N1> fork = new StaxNavigatorImpl<N1>(naming, current, trimContent);
+      Entry next = _navigate(current, axis, null);
+      if (next != null)
+      {
+         current = next;
+      }
+      return fork;
+   }
+
    public StaxNavigator<N> fork() throws StaxNavException
    {
       return fork(Axis.SELF);
@@ -173,17 +191,7 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
 
    public StaxNavigator<N> fork(Axis axis) throws StaxNavException
    {
-      if (axis == null)
-      {
-         throw new NullPointerException("No null axis accepted");
-      }
-      StaxNavigatorImpl<N> fork = new StaxNavigatorImpl<N>(naming, current, trimContent);
-      Entry next = _navigate(current, axis, null);
-      if (next != null)
-      {
-         current = next;
-      }
-      return fork;
+      return fork(naming, axis);
    }
 
    public Iterable<StaxNavigator<N>> fork(N name)

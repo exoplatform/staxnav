@@ -118,6 +118,30 @@ public interface StaxNavigator<N>
    /**
     * Creates a navigator scoped around the currently navigated element. The returned navigator will uses the current
     * element as navigation root and the navigation scope is the set of descendants of its root. The forked navigator
+    * will use the same configuration than the navigator from which it was forked but it will use a nea naming strategy.
+    * The current navigation state will not be affected.
+    *
+    * @return a forked navigator
+    * @throws StaxNavException any StaxNavException
+    */
+   <N> StaxNavigator<N> fork(Naming<N> naming) throws StaxNavException;
+
+   /**
+    * Creates a navigator scoped around the currently navigated element. The returned navigator will uses the current
+    * element as navigation root and the navigation scope is the set of descendants of its root. The forked navigator
+    * will use the same configuration than the navigator from which it was forked but it will use a new naming
+    * strategy. The current navigation state will be moved according to the <code>axis</code> argument value when
+    * a valid element is found otherwise it will not change.
+    *
+    * @param axis the axis
+    * @return a forked navigator
+    * @throws NullPointerException if the axis argument is null
+    */
+   <N> StaxNavigator<N> fork(Naming<N> naming, Axis axis) throws NullPointerException;
+
+   /**
+    * Creates a navigator scoped around the currently navigated element. The returned navigator will uses the current
+    * element as navigation root and the navigation scope is the set of descendants of its root. The forked navigator
     * will use the same configuration than the navigator from which it was forked. The current navigation state will
     * not be affected.
     *
