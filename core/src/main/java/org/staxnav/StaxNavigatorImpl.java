@@ -342,6 +342,17 @@ class StaxNavigatorImpl<N> implements StaxNavigator<N>
       return navigate(Axis.NEXT, name);
    }
 
+   public StaxNavigator<N> assertNext(N expectedName) throws NullPointerException, StaxNavException {
+      if (expectedName == null) {
+         throw new NullPointerException("No null expected name argument allowed");
+      }
+      if (next(expectedName)) {
+         return this;
+      } else {
+         throw new StaxNavException(current.getElement().getLocation(), "Was expecting the element " + expectedName + " to be the next one");
+      }
+   }
+
    public N child() throws StaxNavException
    {
       return navigate(Axis.CHILD);

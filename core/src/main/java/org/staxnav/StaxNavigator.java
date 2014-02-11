@@ -246,6 +246,18 @@ public interface StaxNavigator<N>
    boolean next(N name) throws NullPointerException, StaxNavException;
 
    /**
+    * Assert there is a next element with the expected name. If there is no such next element,
+    * the method fails and throws a {@link org.staxnav.StaxNavException} otherwise navigation occurs
+    * to that element and the method returns this navigator object.
+    *
+    * @param expectedName the expected element name
+    * @return the element content
+    * @throws java.lang.NullPointerException if the expected name is null
+    * @throws StaxNavException
+    */
+   StaxNavigator<N> assertNext(N expectedName) throws NullPointerException, StaxNavException;
+
+   /**
     * Attempts to navigate to the next element when it belongs to the set of specified names.
     * If the navigation occurs, the navigator now points to that element and the method returns
     * the element that was navigated to. Otherwise no navigation happens and the method return null.

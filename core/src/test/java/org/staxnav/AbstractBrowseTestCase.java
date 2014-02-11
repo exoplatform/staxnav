@@ -17,7 +17,6 @@ package org.staxnav;/*
 * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
 */
 
-import javax.xml.stream.XMLInputFactory;
 import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -288,6 +287,31 @@ public abstract class AbstractBrowseTestCase<N> extends AbstractXMLTestCase
       }
       assertNameEquals("foobar2", navigator.getName());
       assertNull(navigator.next());
+   }
+
+   public void testAssertNext() throws Exception
+   {
+      assertNameEquals("foo1", navigator.getName());
+      N foo2 = createName("foo2");
+      try {
+         navigator.assertNext(foo2);
+      } catch (StaxNavException expected) {
+         assertNotNull(expected.getLocation());
+      }
+      assertEquals(createName("bar1"), navigator.next());
+      assertEquals(navigator, navigator.assertNext(foo2));
+      assertEquals(foo2, navigator.getName());
+      N bar2 = createName("bar2");
+      assertEquals(navigator, navigator.assertNext(bar2));
+      assertEquals(bar2, navigator.getName());
+      N bar3 = createName("bar3");
+      assertEquals(navigator, navigator.assertNext(bar3));
+      assertEquals(bar3, navigator.getName());
+      N foo3 = createName("foo3");
+      assertEquals(navigator, navigator.assertNext(foo3));
+      assertEquals(foo3, navigator.getName());
+      assertEquals(createName("foobar1"), navigator.next());
+      assertEquals(createName("foobar2"), navigator.next());
    }
 
    public void testfind1() throws Exception
